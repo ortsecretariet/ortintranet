@@ -1,0 +1,11 @@
+{
+  "name": "dashboard-standalone",
+  "version": "1.0.0",
+  "description": "Standalone mock dashboard",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

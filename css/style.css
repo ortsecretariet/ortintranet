@@ -1,0 +1,154 @@
+:root {
+  --ink: #1C1C1A;
+  --paper: #F3F1E9;
+  --paper-raised: #FFFFFF;
+  --green: #123423;
+  --green-deep: #0B2417;
+  --gold: #C9A227;
+  --sage: #E8EDE7;
+  --line: #DEDACC;
+  --muted: #64615A;
+  --danger: #B3261E;
+  --radius: 3px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--gold); color: var(--paper); }
+button { font-family: inherit; cursor: pointer; }
+a { color: var(--green); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+#app { min-height: 100vh; }
+.topbar {
+  background: var(--green);
+  color: var(--paper);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 3px solid var(--gold);
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-logo { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
+.topbar-title-group { display: flex; flex-direction: column; gap: 1px; }
+.topbar-title { font-family: 'Source Serif 4', serif; font-weight: 700; font-size: 15px; color: var(--gold); letter-spacing: .3px; }
+.topbar-subtitle { font-size: 10.5px; color: rgba(220,230,223,0.7); letter-spacing: .3px; }
+.topbar-right { display: flex; align-items: center; gap: 14px; font-size: 12.5px; }
+.user-chip { display: flex; align-items: center; gap: 7px; }
+.user-avatar {
+  width: 24px; height: 24px; border-radius: 50%; background: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px; font-weight: 600; color: var(--green-deep);
+}
+.role-tag {
+  font-size: 10px; letter-spacing: .6px; text-transform: uppercase;
+  background: rgba(255,255,255,0.14); padding: 2px 8px; border-radius: 999px; color: #DCE6DF;
+}
+.logout-link { color: #CFE0D5; font-size: 12px; border-bottom: 1px dotted #6E9483; cursor: pointer; }
+.logout-link:hover { color: #fff; }
+
+.greeting-row {
+  max-width: 1080px; margin: 0 auto; padding: 16px 24px 0;
+  display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px;
+}
+.greeting { font-family: 'Source Serif 4', serif; font-size: 19px; color: var(--ink); }
+.greeting-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.tribunal-badge { font-size: 11.5px; font-weight: 600; color: var(--green); background: var(--sage); padding: 4px 11px; border-radius: 999px; }
+
+.nav-tabs {
+  display: flex; gap: 2px; background: var(--paper-raised);
+  border-bottom: 1px solid var(--line); padding: 0 24px; margin-top: 14px; flex-wrap: wrap;
+}
+.nav-tab {
+  border: none; background: transparent; padding: 10px 16px 9px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+}
+.nav-tab.active { color: var(--green); border-bottom-color: var(--gold); }
+.nav-tab:hover:not(.active) { color: var(--ink); }
+
+.page-head { max-width: 1080px; margin: 0 auto; padding: 16px 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.scope-note { font-size: 12.5px; color: var(--muted); margin: 0; }
+.controls { max-width: 1080px; margin: 0 auto; padding: 12px 24px 6px; }
+.search-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.search-box {
+  flex: 1 1 240px; display: flex; align-items: center; gap: 8px;
+  background: var(--paper-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px;
+}
+.search-box input { border: none; outline: none; background: transparent; font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; width: 100%; color: var(--ink); }
+.search-box svg { flex-shrink: 0; opacity: .5; }
+.filter-select {
+  font-family: 'IBM Plex Sans', sans-serif; font-size: 13.5px; background: var(--paper-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; color: var(--ink); cursor: pointer;
+}
+
+.notice-list { max-width: 1080px; margin: 0 auto; padding: 8px 24px 50px; display: grid; gap: 12px; }
+.notice-card {
+  background: var(--paper-raised); border: 1px solid var(--line); border-left: 3px solid var(--green); border-radius: var(--radius); padding: 15px 17px 14px;
+}
+.notice-card h3 { margin: 0 0 8px; font-size: 16px; font-family: 'Source Serif 4', serif; color: var(--ink); }
+.notice-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.notice-body { font-size: 14px; line-height: 1.6; color: #34423b; white-space: pre-wrap; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+.card-category { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+.card-title { font-family: 'Source Serif 4', serif; font-size: 16px; font-weight: 600; line-height: 1.32; margin: 0 0 6px; color: var(--ink); }
+.card-posted-by { font-size: 11.5px; color: var(--muted); margin: 0 0 6px; }
+.card-posted-by strong { color: var(--ink); font-weight: 600; }
+.card-date { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.card-excerpt { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0 0 9px; }
+.card-foot { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); flex-wrap: wrap; }
+.print-btn {
+  border: 1px solid var(--line); background: var(--paper-raised); color: var(--green); border-radius: var(--radius); padding: 6px 10px; font-size: 12px; font-weight: 600; margin-left: auto;
+}
+.print-btn:hover { background: var(--sage); }
+
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .3px; }
+.pill.general { background: #eaf1ee; color: var(--green); }
+.pill.dept { background: #f3ecd6; color: #7a5c07; }
+.pill.pending { background: #fdecea; color: var(--danger); }
+.pill.approved { background: #e7f5ec; color: #1e6b40; }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+.field input, .field select, .field textarea {
+  width: 100%; font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; padding: 9px 11px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); color: var(--ink);
+}
+.field textarea { resize: vertical; min-height: 90px; }
+.field .hint { font-size: 12px; color: var(--muted); margin-top: 6px; display: block; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--gold); }
+.check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 13.5px; }
+.btn-primary {
+  width: 100%; padding: 11px 14px; border: none; border-radius: var(--radius); background: var(--green); color: var(--paper); font-weight: 600; font-size: 14px;
+}
+.btn-primary:hover { background: var(--green-deep); }
+
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+
+.print-view { display: none; }
+@media print {
+  body * { visibility: hidden; }
+  .print-view, .print-view * { visibility: visible; }
+  .print-view { display: block; position: static; width: 100%; padding: 0; }
+  .topbar, .greeting-row, .nav-tabs, .page-head, .controls, .notice-list, .notice-card, .btn-primary, .print-btn { display: none !important; }
+  body { background: #fff; }
+  .print-sheet {
+    display: block; padding: 0; color: #111; font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .print-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding-bottom: 16px; margin-bottom: 18px; border-bottom: 2px solid var(--green);
+  }
+  .print-logo { width: 54px; height: 54px; object-fit: contain; }
+  .print-header-text { flex: 1; }
+  .print-org { font-family: 'Source Serif 4', serif; font-size: 16px; font-weight: 700; color: var(--green); }
+  .print-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .print-meta { text-align: right; font-size: 11px; color: var(--muted); }
+  .print-title { font-family: 'Source Serif 4', serif; font-size: 24px; font-weight: 700; margin: 0 0 10px; }
+  .print-body { white-space: pre-wrap; font-size: 13px; line-height: 1.7; }
+}

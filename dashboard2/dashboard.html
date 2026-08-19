@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Tribunals Memos &amp; Notices</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Toast container -->
+<div id="toastContainer"></div>
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="seal"><img src="logo.png" alt="Judiciary Logo" style="max-width: 160px; height: auto;"></div>
+      <div><b>Tribunals</b><span>Memos &amp; Notices</span></div>
+    </div>
+    <nav>
+      <button class="nav-link active" data-view="feed">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        My Notices
+      </button>
+      <button class="nav-link" data-view="publish" id="publishLink">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Post / Submit Memo
+      </button>
+      <button class="nav-link" data-view="calendar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Events Calendar
+      </button>
+      <button class="nav-link" data-view="documents">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Documents
+      </button>
+      <button class="nav-link" data-view="upload-doc">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload Document
+      </button>
+      <button class="nav-link" id="approvalsLink" data-view="approvals" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Approvals <span class="notif-badge" id="pendingBadge" style="display:none;"></span>
+      </button>
+      <button class="nav-link" id="usersLink" data-view="users" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        All Users
+      </button>
+      <button class="nav-link" data-view="profile">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </button>
+      <button id="logoutBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log out
+      </button>
+    </nav>
+    <div class="sidebar-user">
+      <img id="sbProfilePic" src="logo.png" alt="Profile" class="sb-profile-pic">
+      <div>
+        <b id="sbUserName">—</b><br>
+        <span id="sbUserDept">—</span>
+      </div>
+    </div>
+
+    <div class="sidebar-online" id="sidebarOnline">
+      <div class="online-header">
+        <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#4ade80"/></svg>
+        Online Users
+      </div>
+      <div id="onlineUsersList" class="online-list">
+        <div class="online-empty">Loading…</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="mainContent">
+    <!-- ========== TOP BAR ========== -->
+    <div class="topbar" style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; align-items:center; gap: 15px;">
+        <img id="topProfilePic" src="logo.png" alt="Profile" style="display:block; width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid #cfb53b;">
+        <div>
+          <h1 id="welcomeTitle" style="margin:0;">Welcome back</h1>
+          <p id="welcomeSub" style="margin:0; color:var(--ink-600);">Loading your dashboard…</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div id="deptSwitcherWrap" style="display:none;">
+          <select id="deptSwitcher" class="field-input" style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;">
+            <option value="">All departments</option>
+          </select>
+        </div>
+        <!-- Notification Bell -->
+        <button class="notif-btn" id="notifBtn" onclick="toggleNotifPanel()" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot" id="notifDot" style="display:none;"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========== FEED VIEW ========== -->
+    <section id="view-feed">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="searchBox" placeholder="Search notices by title or keyword…">
+        </div>
+        <select id="categoryFilter"><option value="">All categories</option></select>
+        <input type="date" id="dateFilter" title="Filter by Date">
+        <select id="urgentFilter">
+          <option value="">All priorities</option>
+          <option value="urgent">Urgent only</option>
+        </select>
+      </div>
+      <!-- Pinned / Urgent Section -->
+      <div id="pinnedSection" style="display:none;">
+        <p class="section-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>
+          Pinned &amp; Urgent
+        </p>
+        <div class="notice-list" id="pinnedList"></div>
+      </div>
+      <p class="section-label" id="allNoticesLabel">All notices</p>
+      <div class="notice-list" id="noticeList"></div>
+    </section>
+
+    <!-- ========== MERGED PUBLISH / SUBMIT MEMO VIEW ========== -->
+    <section id="view-publish" style="display:none; max-width: 640px;">
+      <div class="notice-card">
+        <h3 id="publishFormTitle" style="margin-top:0;">Post a new notice or memo</h3>
+        <p class="notice-meta" id="publishFormSubtitle">Create updates or memos for review and publishing.</p>
+        
+        <form id="unifiedPublishForm">
+          <!-- Role specific audience selector -->
+          <div class="field" id="audienceFieldWrap">
+            <label>Send to</label>
+            <div class="field-input">
+              <select id="pub_audience" style="border:none;outline:none;padding:13px 14px;width:100%;background:transparent;font-size:14.5px;">
+                <option value="dept">My department only</option>
+                <option value="general">All staff (General)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="field">
+            <label>Title</label>
+            <div class="field-input"><input type="text" id="pub_title" required placeholder="e.g. Workshop schedule for July"></div>
+          </div>
+          <div class="field">
+            <label>Category</label>
+            <div class="field-input"><input type="text" id="pub_category" placeholder="e.g. Training, Leave, Circular"></div>
+          </div>
+
+          <!-- Admin: issuing office -->
+          <div class="field" id="pubOfficeWrap" style="display:none;">
+            <label>Issuing Office / Directorate</label>
+            <div class="field-input">
+              <select id="pub_issuing_office" style="border:none;outline:none;padding:13px 14px;width:100%;background:transparent;font-size:14.5px;">
+                <option value="">Select issuing office…</option>
+                <optgroup label="Offices">
+                  <option value="Office of the Chief Justice">Office of the Chief Justice</option>
+                  <option value="Office of the Chief Registrar of the Judiciary">Office of the Chief Registrar of the Judiciary</option>
+                  <option value="Office of the Registrar, Tribunals">Office of the Registrar, Tribunals</option>
+                </optgroup>
+                <optgroup label="Directorates">
+                  <option value="Human Resource">Human Resource</option>
+                  <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+                  <option value="ICT">ICT</option>
+                  <option value="Supply Chain Management">Supply Chain Management</option>
+                  <option value="Administration">Administration</option>
+                  <option value="Legal Services">Legal Services</option>
+                  <option value="Public Relations &amp; Communication">Public Relations &amp; Communication</option>
+                  <option value="Internal Audit">Internal Audit</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          
+          <div class="field">
+            <label>Date</label>
+            <div class="field-input"><input type="date" id="pub_date" style="border:none;outline:none;padding:13px 14px;width:100%;background:transparent;font-size:14.5px;"></div>
+          </div>
+          
+          <div class="field">
+            <label>Details / Memo text</label>
+            <textarea class="field-textarea" id="pub_body" required placeholder="Write the notice or memo details here…" style="min-height:140px;"></textarea>
+          </div>
+          
+          <!-- Admin options -->
+          <div class="field" id="priorityFieldWrap" style="display:none;">
+            <label>Priority</label>
+            <div class="field-input">
+              <select id="pub_urgent" style="border:none;outline:none;padding:13px 14px;width:100%;background:transparent;font-size:14.5px;">
+                <option value="">Normal</option>
+                <option value="urgent">Urgent — pin to top</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="check-row" id="pubGeneralCheckWrap" style="display:none;">
+            <input type="checkbox" id="pub_general"> <label for="pub_general" style="margin:0;">Post as a general notice (visible to every department)</label>
+          </div>
+          
+          <!-- Attachments -->
+          <div class="field">
+            <label>Attachment <span style="font-weight:400;color:var(--ink-600);">— optional</span></label>
+            <div class="upload-zone" id="pubUploadZone" onclick="document.getElementById('pub_file').click()">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a5 5 0 0 1-7.07-7.07l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              <span id="pubUploadLabel">Click to attach a file</span>
+              <span class="upload-hint">PDF, Word, Excel — max 10 MB</span>
+            </div>
+            <input type="file" id="pub_file" accept="*/*" style="display:none" onchange="handlePubFileSelect(this)">
+          </div>
+          
+          <button type="submit" class="btn-primary" id="pubSubmitBtn">Submit Notice</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========== EVENTS CALENDAR VIEW ========== -->
+    <section id="view-calendar" style="display:none;">
+      <div class="topbar" style="margin-bottom:16px;">
+        <div>
+          <h2 style="margin:0;font-size:20px;color:var(--green-950);">Leave &amp; Training Calendar</h2>
+          <p style="margin:4px 0 0;color:var(--ink-600);font-size:13px;">View and schedule key events, sittings, holidays and staff schedules.</p>
+        </div>
+      </div>
+      
+      <!-- Embedded Calendar and List -->
+      <div class="calendar-layout" style="display:grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+        <!-- Embedded Google Calendar mock frame -->
+        <div class="notice-card" style="padding: 15px; height: 500px; display: flex; flex-direction: column;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <b style="color:var(--green-950); font-size:15px;">Google Calendar Live Feed</b>
+            <a href="https://calendar.google.com" target="_blank" class="btn-gold" style="padding: 6px 12px; font-size: 12px; border-radius: 6px;">Open in Google Calendar</a>
+          </div>
+          <!-- Clean mock Google Calendar UI inside the frame -->
+          <iframe src="https://calendar.google.com/calendar/embed?height=400&wkst=1&ctz=Africa%2FNairobi&bgcolor=%23ffffff&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=1&mode=MONTH&src=en.ke%23holiday%40group.v.calendar.google.com" style="border-width:0; width:100%; height:100%; border-radius:8px;" frameborder="0" scrolling="no"></iframe>
+        </div>
+
+        <!-- Admin Event Creator & Event List -->
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Add Event (Only visible to admin) -->
+          <div class="notice-card" id="adminEventCreator" style="display:none; padding:18px;">
+            <h3 style="margin-top:0; font-size:15px; color:var(--green-950);">Add Calendar Event</h3>
+            <form id="addEventForm">
+              <div class="field" style="margin-bottom:10px;">
+                <label style="font-size:12px;">Event Title</label>
+                <div class="field-input"><input type="text" id="ev_title" required placeholder="e.g. Panel B sitting reschedule" style="padding:8px 10px; font-size:13px;"></div>
+              </div>
+              <div class="field" style="margin-bottom:10px;">
+                <label style="font-size:12px;">Event Date &amp; Time</label>
+                <div class="field-input"><input type="datetime-local" id="ev_datetime" required style="padding:8px 10px; font-size:13px;"></div>
+              </div>
+              <div class="field" style="margin-bottom:10px;">
+                <label style="font-size:12px;">Audience</label>
+                <div class="field-input">
+                  <select id="ev_scope" style="border:none;outline:none;padding:8px 10px;width:100%;background:transparent;font-size:13px;">
+                    <option value="general">General event</option>
+                    <option value="department">Department only</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field" id="ev_department_wrap" style="margin-bottom:10px; display:none;">
+                <label style="font-size:12px;">Department</label>
+                <div class="field-input">
+                  <select id="ev_department" style="border:none;outline:none;padding:8px 10px;width:100%;background:transparent;font-size:13px;">
+                    <option value="Registry">Registry</option>
+                    <option value="Court Coordination">Court Coordination</option>
+                    <option value="Legal Support">Legal Support</option>
+                    <option value="Human Resources">Human Resources</option>
+                    <option value="IT Services">IT Services</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Public Relations">Public Relations</option>
+                    <option value="Records Management">Records Management</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:12px;">
+                <label style="font-size:12px;">Details</label>
+                <textarea class="field-textarea" id="ev_details" placeholder="Brief event description..." style="min-height:60px; font-size:13px; padding:8px;"></textarea>
+              </div>
+              <button type="submit" class="btn-primary" style="padding:9px; font-size:13px;">Add Event &amp; Notify Staff</button>
+            </form>
+          </div>
+
+          <!-- Upcoming Events Feed -->
+          <div class="notice-card" style="padding:18px; flex: 1;">
+            <h3 style="margin-top:0; font-size:15px; color:var(--green-950); margin-bottom:12px;">Upcoming Events</h3>
+            <div id="calendarEventsList" class="notice-list" style="gap: 10px;">
+              <!-- Events populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== APPROVALS VIEW ========== -->
+    <section id="view-approvals" style="display:none;">
+      <div class="notice-list" id="approvalsList"></div>
+    </section>
+
+    <!-- ========== USERS VIEW ========== -->
+    <section id="view-users" style="display:none;">
+      <div id="usersTableWrap"></div>
+    </section>
+
+    <!-- ========== DOCUMENTS LIST VIEW ========== -->
+    <section id="view-documents" style="display:none;">
+      <div class="topbar" style="margin-bottom:16px;">
+        <div>
+          <h2 style="margin:0;font-size:20px;color:var(--green-950);">Department Documents</h2>
+          <p style="margin:4px 0 0;color:var(--ink-600);font-size:13px;">Browse uploaded announcements, memos, invoices and reports.</p>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-bottom:18px;">
+        <div class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="docSearch" placeholder="Search documents…">
+        </div>
+        <select id="docTypeFilter">
+          <option value="">All types</option>
+          <option value="Announcement">Announcement</option>
+          <option value="Memo">Memo</option>
+          <option value="Invoice">Invoice</option>
+          <option value="Circular">Circular</option>
+          <option value="Report">Report</option>
+          <option value="Document">Document</option>
+        </select>
+        <select id="docOfficeFilter">
+          <option value="">All offices</option>
+          <optgroup label="Offices">
+            <option value="Office of the Chief Justice">Office of the Chief Justice</option>
+            <option value="Office of the Chief Registrar of the Judiciary">Office of the Chief Registrar of the Judiciary</option>
+            <option value="Office of the Registrar, Tribunals">Office of the Registrar, Tribunals</option>
+          </optgroup>
+          <optgroup label="Directorates">
+            <option value="Human Resource">Human Resource</option>
+            <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+            <option value="ICT">ICT</option>
+            <option value="Supply Chain Management">Supply Chain Management</option>
+          </optgroup>
+        </select>
+        <input type="date" id="docDateFilter" title="Filter by date">
+      </div>
+      <div class="notice-list" id="documentList"></div>
+    </section>
+
+    <!-- ========== UPLOAD DOCUMENT VIEW ========== -->
+    <section id="view-upload-doc" style="display:none; max-width:640px;">
+      <div class="notice-card">
+        <h3 style="margin-top:0;">Upload a Document</h3>
+        <p class="notice-meta" id="docUploadHint">Your document will be available once approved by your department admin.</p>
+        <form id="docUploadForm">
+          <div class="field">
+            <label>Document Title</label>
+            <div class="field-input"><input type="text" id="d_title" required placeholder="e.g. June Payroll Invoice"></div>
+          </div>
+          <div class="field">
+            <label>Document Type</label>
+            <div class="field-input">
+              <select id="d_type" required style="border:none;outline:none;padding:13px 14px;width:100%;background:transparent;font-size:14.5px;">
+                <option value="">Select type…</option>
+                <option value="Announcement">Announcement</option>
+                <option value="Memo">Memo</option>
+                <option value="Invoice">Invoice</option>
+                <option value="Circular">Circular</option>
+                <option value="Report">Report</option>
+                <option value="Document">Document</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Issuing Office / Directorate</label>
+            <div class="field-input">
+              <select id="d_issuing_office" style="border:none;outline:none;padding:13px 14px;width:100%;background:transparent;font-size:14.5px;">
+                <option value="">Select office…</option>
+                <optgroup label="Offices">
+                  <option value="Office of the Chief Justice">Office of the Chief Justice</option>
+                  <option value="Office of the Chief Registrar of the Judiciary">Office of the Chief Registrar of the Judiciary</option>
+                  <option value="Office of the Registrar, Tribunals">Office of the Registrar, Tribunals</option>
+                </optgroup>
+                <optgroup label="Directorates">
+                  <option value="Human Resource">Human Resource</option>
+                  <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+                  <option value="ICT">ICT</option>
+                  <option value="Supply Chain Management">Supply Chain Management</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Description (optional)</label>
+            <textarea class="field-textarea" id="d_description" placeholder="Briefly describe what this document contains…"></textarea>
+          </div>
+          <div class="field">
+            <label>File <span style="color:var(--danger);">*</span></label>
+            <div class="field-input"><input type="file" id="d_file" accept="*/*" required style="padding:10px 14px;"></div>
+            <div style="font-size:12px;color:var(--ink-600);margin-top:5px;">PDF, Word, Excel, images, ZIP etc. — max 50 MB</div>
+          </div>
+          <div class="check-row" id="docGeneralWrap" style="display:none;">
+            <input type="checkbox" id="d_general"> <label for="d_general" style="margin:0;">Share with all departments (general document)</label>
+          </div>
+          <button type="submit" class="btn-primary" id="docUploadBtn">Upload Document</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========== PROFILE VIEW (WhatsApp style) ========== -->
+    <section id="view-profile" style="display:none; max-width: 680px;">
+
+      <!-- Header banner -->
+      <div style="background: #1E6B44; padding: 24px 28px 60px; border-radius: 12px 12px 0 0; position:relative;">
+        <h2 style="margin:0; color:#fff; font-size:18px;">Profile</h2>
+        <p style="margin:4px 0 0; color:rgba(255,255,255,0.7); font-size:13px;">Your personal information</p>
+      </div>
+
+      <!-- Avatar bubble overlapping the banner -->
+      <div style="display:flex; justify-content:center; margin-top:-50px; position:relative; z-index:2;">
+        <div style="position:relative; display:inline-block;">
+          <img id="profilePreview" src="logo.png" alt="Profile"
+               style="width:100px; height:100px; border-radius:50%; object-fit:cover;
+                      border:4px solid #fff; box-shadow:0 2px 12px rgba(0,0,0,0.15);
+                      background:#e5ddd5; display:block;">
+          <label for="p_picture" title="Change photo"
+                 style="position:absolute; bottom:2px; right:2px;
+                        background:#25D366; border-radius:50%; width:30px; height:30px;
+                        display:flex; align-items:center; justify-content:center;
+                        cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.3);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </label>
+          <input type="file" id="p_picture" accept="image/*" style="display:none;">
+        </div>
+      </div>
+
+      <!-- Fields card -->
+      <div style="background:#fff; border-radius:0 0 12px 12px; padding:0 0 12px; box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+
+        <form id="profileForm">
+
+          <!-- Staff ID (read-only) -->
+          <div style="padding:16px 24px 8px; border-bottom:1px solid #f0f0f0;">
+            <div style="font-size:11px; color:#25D366; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;">Staff ID</div>
+            <div id="p_staffid_display" style="font-size:15px; color:#111;">—</div>
+          </div>
+
+          <!-- Full Name -->
+          <div style="padding:14px 24px 8px; border-bottom:1px solid #f0f0f0;">
+            <div style="font-size:11px; color:#25D366; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;">Full Name</div>
+            <input type="text" id="p_fullname" required
+                   style="width:100%; border:none; outline:none; font-size:15px; color:#111;
+                          padding:0; background:transparent; font-family:inherit;">
+          </div>
+
+          <!-- Email -->
+          <div style="padding:14px 24px 8px; border-bottom:1px solid #f0f0f0;">
+            <div style="font-size:11px; color:#25D366; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;">Email</div>
+            <input type="email" id="p_email"
+                   style="width:100%; border:none; outline:none; font-size:15px; color:#111;
+                          padding:0; background:transparent; font-family:inherit;">
+          </div>
+
+          <!-- Department (read-only) -->
+          <div style="padding:14px 24px 8px; border-bottom:1px solid #f0f0f0;">
+            <div style="font-size:11px; color:#25D366; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;">Department</div>
+            <div id="p_dept_display" style="font-size:15px; color:#111;">—</div>
+          </div>
+
+          <!-- Role (read-only) -->
+          <div style="padding:14px 24px 16px;">
+            <div style="font-size:11px; color:#25D366; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;">Role</div>
+            <div id="p_role_display" style="font-size:15px; color:#111;">—</div>
+          </div>
+
+          <div style="padding:0 24px;">
+            <button type="submit" id="profileSaveBtn"
+                    style="width:100%; background:#25D366; color:#fff; border:none; border-radius:8px;
+                           padding:13px; font-size:15px; font-weight:600; cursor:pointer;
+                           transition:background 0.2s;">
+              Save Changes
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ========== NOTIFICATION PANEL ========== -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-panel-head">
+    <span>Notifications</span>
+    <button class="btn-ghost-sm" onclick="closeNotifPanel()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="notifList"></div>
+</div>
+<div class="notif-backdrop" id="notifBackdrop" onclick="closeNotifPanel()"></div>
+
+<!-- ========== MODAL NOTICE READER ========== -->
+<div class="modal-backdrop" id="noticeReaderBackdrop">
+  <div class="modal" style="max-width: 780px; width: 90%; padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; border-radius: 14px;">
+    
+    <!-- Header/Action bar -->
+    <div class="reader-bar" style="padding: 14px 24px; position: sticky; top: 0; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;">
+      <h3 style="margin: 0; font-size: 15px; color: var(--green-950); font-weight: 700;">Notice Details</h3>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn-reader-delete" id="readerDeleteBtn" style="display:none;" onclick="deleteCurrentNotice()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          Delete
+        </button>
+        <button class="btn-reader-withdraw" id="readerWithdrawBtn" style="display:none;" onclick="withdrawCurrentMemo()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Withdraw
+        </button>
+        
+        <div class="print-menu-wrap">
+          <button class="reader-print" onclick="togglePrintMenu()" style="padding: 8px 12px; font-size: 13px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print
+          </button>
+          <div class="print-menu" id="printMenu" style="right: 0; left: auto;">
+            <div class="print-menu-item" onclick="doPrint(false)">Print notice only</div>
+            <div class="print-menu-item" onclick="doPrint(true)">Print with attachment</div>
+            <div class="print-menu-note">If your browser defaults to Save as PDF, choose a printer destination in the print dialog.</div>
+          </div>
+        </div>
+        
+        <button class="modal-close" onclick="closeDetail()" style="position: static; font-size: 20px; color: var(--ink-600); cursor: pointer; background: none; border: none; padding: 4px 8px;">✕</button>
+      </div>
+    </div>
+
+    <!-- Scrollable content area -->
+    <div style="overflow-y: auto; padding: 24px 30px 40px; flex: 1;">
+      <div id="readerStatusBanner" class="reader-status-banner" style="display:none; margin: -24px -30px 24px; border-radius: 0;"></div>
+
+      <div class="reader-meta" style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+        <span class="ref-tag" id="detailRef"></span>
+        <span class="card-date" id="detailDate"></span>
+      </div>
+      <span class="card-category" id="detailCat" style="font-weight: 700; color: var(--green-800); font-size: 13px; display: block; margin-bottom: 8px;"></span>
+      <h1 id="detailTitle" class="reader-title" style="font-size: 22px; color: var(--green-950); margin: 0 0 10px; line-height: 1.3;"></h1>
+      <div class="reader-byline" id="detailByline" style="font-size: 12px; color: var(--ink-600); margin-bottom: 18px;"></div>
+      <div class="reader-divider" style="height: 1px; background: var(--border); margin-bottom: 20px;"></div>
+      <p id="detailBody" class="reader-content" style="font-size: 14.5px; line-height: 1.7; color: var(--ink-700); white-space: pre-wrap; margin: 0;"></p>
+      
+      <div id="detailAttach" class="reader-attach" style="margin-top: 24px;"></div>
+      <div id="printAttachSection" class="print-attach-section" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Print-only block (completely hidden on screen, populated dynamically for browser print output) -->
+<div id="printOnlyOutput" style="display:none;">
+  <div class="print-header">
+    <div class="print-header-logo-wrap">
+      <img src="logo.png" alt="The Judiciary of Kenya" class="print-logo">
+    </div>
+    <div class="print-header-center">
+      <div class="print-org">THE JUDICIARY OF KENYA</div>
+      <div class="print-sub" id="printTribunal"></div>
+      <div class="print-tagline">Internal Memo / Notice</div>
+    </div>
+    <div class="print-header-right">
+      <div class="print-ref-label">Reference No.</div>
+      <div class="print-ref" id="printRefPrint"></div>
+      <div class="print-date-label">Date</div>
+      <div class="print-date" id="printDatePrint"></div>
+    </div>
+  </div>
+  <div class="print-header-rule"></div>
+  
+  <div class="reader-body" style="padding: 20px 48px;">
+    <div class="reader-meta">
+      <span class="ref-tag" id="printRefBody"></span>
+      <span class="card-date" id="printDateBody"></span>
+    </div>
+    <span class="card-category" id="printCatBody"></span>
+    <h1 id="printTitleBody" class="reader-title"></h1>
+    <div class="reader-byline" id="printBylineBody"></div>
+    <div class="reader-divider"></div>
+    <p id="printBodyContent" class="reader-content"></p>
+    <div id="printAttachSectionPrint"></div>
+  </div>
+</div>
+
+<!-- ========== REJECT MEMO MODAL ========== -->
+<div class="modal-backdrop" id="rejectBackdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeReject()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h2>Reject Submission</h2>
+    <p class="notice-meta">Let the staff member know why their memo was not approved.</p>
+    <div class="field">
+      <label>Reason</label>
+      <textarea class="field-textarea" id="rejectReason" placeholder="e.g. Please revise the scope and resubmit…"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn-secondary-sm" onclick="closeReject()">Cancel</button>
+      <button class="btn-danger" onclick="confirmReject()">Reject</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== DOCUMENT PREVIEW MODAL ========== -->
+<div class="modal-backdrop" id="previewBackdrop">
+  <div class="modal preview-modal">
+    <div class="preview-header">
+      <h3 id="previewTitle" style="margin:0;">Document Preview</h3>
+      <div>
+        <a id="previewDownloadBtn" href="#" target="_blank" class="btn-primary" style="text-decoration:none; margin-right: 10px; padding: 6px 12px; border-radius: 6px;">Download</a>
+        <button class="modal-close" onclick="closePreview()" style="position: static; font-size: 20px; color: var(--ink-600); cursor: pointer; background: none; border: none; padding: 4px 8px;">✕</button>
+      </div>
+    </div>
+    <div class="preview-content" id="previewContent">
+      <!-- Iframe or image inserted here -->
+    </div>
+  </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>

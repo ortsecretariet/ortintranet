@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Session files
+backend/sessions/
+JUDICIARY/backend/sessions/
+
+# Uploaded files
+JUDICIARY/backend/uploads/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+*.sql-shm
+*.sql-wal
